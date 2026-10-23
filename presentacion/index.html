@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgunsaEntregas Web — Presentación</title>
+<style>
+  :root{ --rojo:#DA291C; --rojo-osc:#a81f14; --gris:#3F3F3E; --coolgray:#9A9999; --negro:#2D2926; --claro:#f4f5f8; }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;}
+  body{background:var(--negro);color:var(--negro);}
+
+  .slide{min-height:100vh;width:100%;display:none;flex-direction:column;background:var(--claro);padding:48px 56px;position:relative;}
+  .slide.active{display:flex;}
+  .slide .kicker{color:var(--rojo);font-weight:700;letter-spacing:1px;font-size:13px;text-transform:uppercase;margin-bottom:8px;}
+  .slide h1{font-size:40px;color:var(--negro);line-height:1.1;margin-bottom:14px;}
+  .slide h2{font-size:30px;color:var(--negro);margin-bottom:18px;}
+  .slide p{font-size:17px;line-height:1.6;color:var(--gris);max-width:900px;}
+  .acento{height:5px;width:90px;background:var(--rojo);border-radius:3px;margin:10px 0 26px;}
+  .topbar{position:absolute;top:22px;right:40px;}
+  .topbar img{height:34px;}
+  .slidenum{position:absolute;bottom:20px;right:40px;font-size:12px;color:var(--coolgray);}
+
+  .nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:50;}
+  .nav button{background:var(--rojo);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .dots{position:fixed;bottom:66px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:50;}
+  .dots span{width:8px;height:8px;border-radius:50%;background:#bbb;cursor:pointer;}
+  .dots span.on{background:var(--rojo);}
+
+  .cover{background:linear-gradient(135deg,#fff 0%,#fff 55%,#ffeae8 100%);justify-content:center;}
+  .cover .logo{width:auto;height:auto;max-width:340px;max-height:90px;object-fit:contain;margin-bottom:30px;}
+  .cover h1{font-size:50px;}
+  .cover .sub{font-size:20px;color:var(--gris);margin-top:8px;}
+  .cover .footer-cover{position:absolute;bottom:40px;left:56px;font-size:14px;color:var(--coolgray);}
+
+  .cards{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;}
+  .card{background:#fff;border-radius:14px;padding:22px;flex:1;min-width:230px;box-shadow:0 6px 18px rgba(0,0,0,.06);border-top:4px solid var(--rojo);}
+  .card h3{font-size:18px;color:var(--rojo);margin-bottom:8px;}
+  .card p{font-size:15px;}
+
+  ul.lista{margin-top:10px;max-width:900px;}
+  ul.lista li{font-size:17px;line-height:1.9;color:var(--gris);list-style:none;padding-left:28px;position:relative;}
+  ul.lista li::before{content:"✓";color:var(--rojo);font-weight:700;position:absolute;left:0;}
+
+  .flow{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;align-items:stretch;}
+  .step{background:#fff;border-radius:12px;padding:18px;flex:1;min-width:150px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+  .step .num{width:30px;height:30px;border-radius:50%;background:var(--rojo);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:10px;}
+  .step b{display:block;font-size:15px;margin-bottom:4px;color:var(--negro);}
+  .step span{font-size:13px;color:var(--coolgray);}
+
+  .split{display:flex;gap:40px;align-items:center;flex-wrap:wrap;}
+  .split .txt{flex:1;min-width:300px;}
+  .split .media{flex:1;min-width:300px;text-align:center;}
+  .split .media img{max-height:60vh;max-width:100%;border:1px solid #ddd;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+
+  table.comp{width:100%;max-width:860px;border-collapse:collapse;margin-top:14px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.06);}
+  table.comp th,table.comp td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid #eee;}
+  table.comp th{background:var(--rojo);color:#fff;}
+  table.comp td.si{color:#1b7f3b;font-weight:600;}
+  table.comp td.no{color:#b23;font-weight:600;}
+
+  .nota{margin-top:18px;font-size:14px;color:var(--coolgray);max-width:860px;border-left:3px solid var(--rojo);padding-left:12px;}
+  .url{display:inline-block;background:#fff;border:1px dashed var(--rojo);border-radius:8px;padding:8px 14px;color:var(--rojo);font-size:15px;margin-top:8px;}
+  @media print{ .nav,.dots{display:none;} .slide{display:flex!important;page-break-after:always;min-height:auto;} }
+</style>
+</head>
+<body>
+
+<!-- 1. PORTADA -->
+<section class="slide cover active">
+  <img class="logo" src="img/logo_rojo.png" alt="AGUNSA">
+  <div class="kicker">Versión Web · Área TI</div>
+  <h1>AgunsaEntregas Web</h1>
+  <div class="sub">Recepción y firma de equipos a distancia, desde cualquier teléfono</div>
+  <div class="footer-cover">Presentación para jefatura · We make it possible</div>
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+</section>
+
+<!-- 2. QUÉ ES -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Qué es</div>
+  <h2>Una versión web, sin instalar nada</h2>
+  <div class="acento"></div>
+  <p>Complementa la app Android. Mientras la app sirve para entregas presenciales, la versión web resuelve las entregas a <b>usuarios remotos</b>: el técnico y el usuario no necesitan estar juntos.</p>
+  <ul class="lista">
+    <li>Funciona en iPhone, Android y PC (solo abrir un enlace)</li>
+    <li>No requiere instalación ni cuenta</li>
+    <li>No pide permisos en el teléfono del usuario</li>
+    <li>Respeta la identidad de marca AGUNSA</li>
+  </ul>
+  <div class="slidenum">2</div>
+</section>
+
+<!-- 3. EL PROBLEMA -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Problema</div>
+  <h2>El usuario remoto</h2>
+  <div class="acento"></div>
+  <p>Cuando se entrega un equipo a un colaborador que está en otra sucursal, en terreno o en teletrabajo, el técnico no puede pasarle el teléfono para firmar. Hoy eso se resuelve con correos informales o sin respaldo de firma.</p>
+  <ul class="lista">
+    <li>No hay forma simple de obtener la firma a distancia</li>
+    <li>Falta respaldo formal de la recepción</li>
+    <li>El usuario no tiene que instalar apps corporativas</li>
+  </ul>
+  <div class="slidenum">3</div>
+</section>
+
+<!-- 4. CÓMO FUNCIONA -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Cómo funciona</div>
+  <h2>El técnico envía un enlace; el usuario firma</h2>
+  <div class="acento"></div>
+  <div class="flow">
+    <div class="step"><div class="num">1</div><b>El técnico prepara</b><span>Datos del equipo, ticket y destinatarios.</span></div>
+    <div class="step"><div class="num">2</div><b>Genera un enlace</b><span>Los datos viajan dentro del enlace. Sin servidor.</span></div>
+    <div class="step"><div class="num">3</div><b>Lo envía</b><span>Por correo o Teams al usuario remoto.</span></div>
+    <div class="step"><div class="num">4</div><b>El usuario firma</b><span>Abre el enlace, ve los datos (bloqueados) y firma.</span></div>
+    <div class="step"><div class="num">5</div><b>Comprobante</b><span>Se genera el PDF y se envía por correo.</span></div>
+  </div>
+  <div class="nota">Los datos del técnico quedan bloqueados en el enlace: el usuario no puede modificarlos, solo agrega su nombre, RUT y firma.</div>
+  <div class="slidenum">4</div>
+</section>
+
+<!-- 5. DEMO EN VIVO -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Demo</div>
+  <h2>La app, funcionando</h2>
+  <div class="acento"></div>
+  <div class="split">
+    <div class="txt">
+      <p>Esta es la aplicación real. A la derecha, la vista del <b>técnico</b>: completa, elige destinatarios y genera el enlace.</p>
+      <ul class="lista">
+        <li>Interfaz con marca AGUNSA</li>
+        <li>Destinatarios en lista desplegable</li>
+        <li>Botones Copiar / Compartir enlace</li>
+        <li>El usuario abre el enlace y firma a pantalla completa</li>
+      </ul>
+      <p class="nota">Demo funcional: puedes interactuar con el teléfono de la derecha.</p>
+    </div>
+    <div class="media">
+      <div style="width:320px;margin:0 auto;background:#111;border-radius:36px;padding:11px;box-shadow:0 18px 44px rgba(0,0,0,.35);">
+        <iframe src="../index.html" title="AgunsaEntregas"
+          style="width:100%;height:600px;border:none;border-radius:26px;background:#fafafa;display:block;"></iframe>
+      </div>
+    </div>
+  </div>
+  <div class="slidenum">5</div>
+</section>
+
+<!-- 6. EL COMPROBANTE -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Resultado</div>
+  <h2>El comprobante generado</h2>
+  <div class="acento"></div>
+  <div class="split">
+    <div class="txt">
+      <p>PDF liviano (~140 KB) con identidad corporativa, listo para adjuntar al correo sin problemas de tamaño.</p>
+      <ul class="lista">
+        <li>Logo y colores oficiales AGUNSA</li>
+        <li>Datos de la entrega, ticket y firma</li>
+        <li>Nombre de quien recibe</li>
+        <li>Pie "We make it possible"</li>
+      </ul>
+    </div>
+    <div class="media"><img src="img/comprobante.png" alt="Comprobante PDF"></div>
+  </div>
+  <div class="slidenum">6</div>
+</section>
+
+<!-- 7. VENTAJAS -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Valor</div>
+  <h2>Beneficios</h2>
+  <div class="acento"></div>
+  <div class="cards">
+    <div class="card"><h3>Multiplataforma</h3><p>iPhone, Android y PC con el mismo enlace.</p></div>
+    <div class="card"><h3>Sin instalar</h3><p>El usuario solo abre un enlace. Cero permisos.</p></div>
+    <div class="card"><h3>Sin servidor</h3><p>Los datos viajan en el enlace. Bajo costo.</p></div>
+  </div>
+  <div class="cards">
+    <div class="card"><h3>Trazabilidad</h3><p>Comprobante PDF firmado, con fecha y ticket.</p></div>
+    <div class="card"><h3>Datos bloqueados</h3><p>El usuario no puede alterar lo que define TI.</p></div>
+    <div class="card"><h3>Marca</h3><p>Documento profesional con identidad AGUNSA.</p></div>
+  </div>
+  <div class="slidenum">7</div>
+</section>
+
+<!-- 8. CONSIDERACIONES -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">A considerar</div>
+  <h2>Transparencia del alcance</h2>
+  <div class="acento"></div>
+  <table class="comp">
+    <tr><th>Aspecto</th><th>Estado</th></tr>
+    <tr><td>Generar y firmar el comprobante</td><td class="si">Automático</td></tr>
+    <tr><td>PDF liviano para adjuntar</td><td class="si">Resuelto (~140 KB)</td></tr>
+    <tr><td>Adjuntar el PDF al correo</td><td class="no">Paso manual (1 toque en Outlook)</td></tr>
+    <tr><td>Funciona sin internet del usuario</td><td class="si">Genera el PDF offline</td></tr>
+  </table>
+  <div class="nota">El envío usa el Outlook del propio usuario (su identidad). Adjuntar el PDF es un paso manual por seguridad del navegador. El envío 100% automático con adjunto es posible, pero requiere un permiso de correo a nivel de administrador (Microsoft Graph).</div>
+  <div class="slidenum">8</div>
+</section>
+
+<!-- 9. ESTADO / PRÓXIMOS PASOS -->
+<section class="slide">
+  <div class="topbar"><img src="img/logo_rojo.png"></div>
+  <div class="kicker">Estado</div>
+  <h2>Estado actual y próximos pasos</h2>
+  <div class="acento"></div>
+  <p><b style="color:var(--rojo);">Ya funcionando:</b></p>
+  <ul class="lista">
+    <li>Web publicada y operativa</li>
+    <li>Flujo remoto por enlace (técnico → usuario)</li>
+    <li>PDF liviano con marca AGUNSA</li>
+  </ul>
+  <p style="margin-top:16px;"><b style="color:var(--rojo);">Próximos pasos:</b></p>
+  <ul class="lista">
+    <li>Piloto con un grupo de técnicos y usuarios remotos</li>
+    <li>Publicar con acceso controlado para AGUNSA</li>
+    <li>Evaluar el envío automático con apoyo de administración M365</li>
+  </ul>
+  <div class="slidenum">9</div>
+</section>
+
+<!-- 10. CIERRE -->
+<section class="slide cover">
+  <img class="logo" src="img/logo_rojo.png" alt="AGUNSA">
+  <h1 style="font-size:44px;">¿Avanzamos con el piloto?</h1>
+  <div class="sub">AgunsaEntregas Web — recepción remota con firma</div>
+  <div class="footer-cover">Área TI · We make it possible</div>
+  <div class="slidenum">10</div>
+</section>
+
+<div class="dots" id="dots"></div>
+<div class="nav">
+  <button id="prev" onclick="go(-1)">◀ Anterior</button>
+  <button id="next" onclick="go(1)">Siguiente ▶</button>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let idx = 0;
+  const dots = document.getElementById('dots');
+  slides.forEach((_, i) => { const d = document.createElement('span'); d.onclick = () => show(i); dots.appendChild(d); });
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, j) => s.classList.toggle('active', j === idx));
+    [...dots.children].forEach((d, j) => d.classList.toggle('on', j === idx));
+    document.getElementById('prev').disabled = idx === 0;
+    document.getElementById('next').disabled = idx === slides.length - 1;
+  }
+  function go(step){ show(idx + step); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(-1);
+  });
+  show(0);
+</script>
+</body>
+</html>
