@@ -319,9 +319,9 @@ async function generarYEnviar() {
   if (!rut) { toast("Ingresa tu RUT."); return; }
   if (!firmaDataUrl) { toast('Falta la firma. Toca "Agregar firma".'); return; }
 
-  let correos = [...(datosTecnico.correos || [])];
-  if (correoUsuario && correoUsuario.includes("@")) correos.push(correoUsuario);
-  correos = [...new Set(correos.map(e => e.toLowerCase()))];
+  // Destinatarios del técnico van en "Para"; el correo del usuario va en CC.
+  const para = [...new Set((datosTecnico.correos || []).map(e => e.toLowerCase()))];
+  const cc = (correoUsuario && correoUsuario.includes("@")) ? correoUsuario.toLowerCase() : "";
 
   const btn = document.getElementById("btnEnviar");
   btn.disabled = true; btn.textContent = "Generando…";
@@ -354,9 +354,10 @@ async function generarYEnviar() {
       "Fecha y hora: " + fechaHora + "\n" +
       "Descripción: " + datos.descripcion + "\n" +
       (datos.observaciones ? "Observaciones: " + datos.observaciones + "\n" : "") +
-      "\nIMPORTANTE: adjunta el PDF descargado antes de enviar.";
+      "\nIMPORTANTE: adjunta el PDF descargado (opcion 'Adjuntar como copia', NO OneDrive) antes de enviar.";
 
-    const mailto = "mailto:" + correos.join(",") + "?subject=" + encodeURIComponent(asunto) + "&body=" + encodeURIComponent(cuerpo);
+    let mailto = "mailto:" + para.join(",") + "?subject=" + encodeURIComponent(asunto) + "&body=" + encodeURIComponent(cuerpo);
+    if (cc) mailto += "&cc=" + encodeURIComponent(cc);
     setTimeout(() => { window.location.href = mailto; }, 600);
 
     document.getElementById("instru").classList.add("show");
