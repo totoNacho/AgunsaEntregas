@@ -197,12 +197,21 @@ function limpiarCanvas() { setupCanvas(); }
 
 function guardarFirma() {
   if (!hasInk) { toast("Primero firma en el recuadro."); return; }
+
+  // Redimensiona la firma a un ancho máximo razonable para mantener el PDF liviano.
+  const MAX_W = 1000;
+  const escala = Math.min(1, MAX_W / canvas.width);
+  const outW = Math.round(canvas.width * escala);
+  const outH = Math.round(canvas.height * escala);
+
   const out = document.createElement("canvas");
-  out.width = canvas.width; out.height = canvas.height;
+  out.width = outW; out.height = outH;
   const o = out.getContext("2d");
-  o.fillStyle = "#fff"; o.fillRect(0, 0, out.width, out.height);
-  o.drawImage(canvas, 0, 0);
-  firmaDataUrl = out.toDataURL("image/png");
+  o.fillStyle = "#fff"; o.fillRect(0, 0, outW, outH);
+  o.drawImage(canvas, 0, 0, outW, outH);
+
+  // JPEG con fondo blanco: mucho más liviano que PNG para una firma.
+  firmaDataUrl = out.toDataURL("image/jpeg", 0.7);
   document.getElementById("sigThumb").src = firmaDataUrl;
   document.getElementById("sigNo").style.display = "none";
   document.getElementById("sigYes").style.display = "block";
@@ -238,7 +247,7 @@ function cargarImagen(src) {
 // ====================== PDF ======================
 async function generarPdf(datos) {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: "pt", format: "letter" });
+  const doc = new jsPDF({ unit: "pt", format: "letter", compress: true });
   const PW = 612, PH = 792, M = 48;
   let y = 30;
 
@@ -285,7 +294,7 @@ async function generarPdf(datos) {
   if (firmaDataUrl) {
     const fw = PW - M * 2;
     const maxH = Math.max(40, firmaBottom - firmaTop);
-    doc.addImage(firmaDataUrl, "PNG", M, firmaTop, fw, Math.min(maxH, 120), undefined, "FAST");
+    doc.addImage(firmaDataUrl, "JPEG", M, firmaTop, fw, Math.min(maxH, 120), undefined, "FAST");
   }
   doc.setDrawColor(...AGUNSA_BLACK); doc.setLineWidth(1); doc.line(M, lineaY, M + 260, lineaY);
   doc.setFont("helvetica", "normal"); doc.setFontSize(12); doc.setTextColor(...AGUNSA_BLACK);
