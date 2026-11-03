@@ -43,6 +43,30 @@ function toast(msg) {
   t._h = setTimeout(() => t.classList.remove("show"), 3200);
 }
 
+// ====================== ACCESO AL ROL TÉCNICO (barrera simple) ======================
+// NOTA: esto es una barrera básica, NO seguridad fuerte (la clave viaja en el
+// código del lado del cliente). Sirve para que un usuario común no entre a la
+// vista del técnico. La seguridad real vendrá del SSO en Power Pages.
+const TECNICO_USER = "admin";
+const TECNICO_PASS = "1nf0Adm1n";
+
+function pedirAccesoTecnico() {
+  // Si ya se validó en esta sesión del navegador, no vuelve a pedir.
+  if (sessionStorage.getItem("tecnicoOk") === "1") {
+    iniciarVistaTecnico();
+    return;
+  }
+  const u = prompt("Usuario (acceso técnico):");
+  if (u === null) { document.body.innerHTML = "<p style='padding:30px;font-family:sans-serif'>Acceso cancelado.</p>"; return; }
+  const p = prompt("Contraseña:");
+  if (u === TECNICO_USER && p === TECNICO_PASS) {
+    sessionStorage.setItem("tecnicoOk", "1");
+    iniciarVistaTecnico();
+  } else {
+    document.body.innerHTML = "<p style='padding:30px;font-family:sans-serif;color:#DA291C'>Usuario o contraseña incorrectos. Recarga la página para reintentar.</p>";
+  }
+}
+
 // ====================== ARRANQUE: ¿técnico o usuario? ======================
 window.addEventListener("DOMContentLoaded", () => {
   const hash = window.location.hash || "";
@@ -50,11 +74,11 @@ window.addEventListener("DOMContentLoaded", () => {
   if (m) {
     const datos = decodificar(m[1]);
     if (datos && datos.descripcion) {
-      iniciarVistaUsuario(datos);
+      iniciarVistaUsuario(datos);   // El usuario con enlace entra directo, sin login
       return;
     }
   }
-  iniciarVistaTecnico();
+  pedirAccesoTecnico();             // Sin enlace => es el técnico => pide clave
 });
 
 // ====================== VISTA TÉCNICO ======================
@@ -98,10 +122,17 @@ function generarEnlace() {
   const correos = [];
   document.querySelectorAll(".destchk:checked").forEach(c => correos.push(c.dataset.email));
 
-  if (!descripcion) { toast("Ingresa la descripción de lo entregado."); return; }
-  if (correos.length === 0) { toast("Selecciona al menos un destinatario."); return; }
+  // Correos adicionales que el técnico escribe a mano (separados por coma, ; o espacio).
+  const otrosRaw = document.getElementById("otrosCorreos")?.value || "";
+  const otros = otrosRaw.split(/[,;\n ]+/).map(s => s.trim()).filter(s => s.includes("@"));
 
-  const payload = { descripcion, ticket, observaciones, correos };
+  // Combina predefinidos marcados + otros, sin duplicados.
+  const todos = [...new Set([...correos, ...otros].map(e => e.toLowerCase()))];
+
+  if (!descripcion) { toast("Ingresa la descripción de lo entregado."); return; }
+  if (todos.length === 0) { toast("Selecciona o agrega al menos un destinatario."); return; }
+
+  const payload = { descripcion, ticket, observaciones, correos: todos };
   const base = window.location.href.split("#")[0];
   ultimoEnlace = base + "#d=" + codificar(payload);
 
